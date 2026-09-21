@@ -6,3 +6,9 @@
 //
 
 import Foundation
+
+enum Constants {
+    static let name = "name"
+    static let character = "/character"
+    static let baseURL = "https://rickandmortyapi.com/api"
+}

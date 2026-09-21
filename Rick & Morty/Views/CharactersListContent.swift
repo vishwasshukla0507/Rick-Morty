@@ -1,10 +1,11 @@
 //
-//  HomeViewContent.swift
+//  CharactersListContent.swift
 //  Rick & Morty
 //
 //  Created by Vishwas Shukla on 18/09/26.
 //
 
+import Kingfisher
 import SwiftUI
 
 struct CharactersListContent: View {
@@ -23,16 +24,16 @@ struct CharactersListContent: View {
 @ViewBuilder
 func homeViewContentNavigationLabel(for character: CharacterDetails?) -> some View {
     HStack(alignment: .top, spacing: 10) {
-        AsyncImage(url: URL(string: character?.thumbnail ?? .empty)) { image in
-            image
-                .resizable()
-                .frame(width: 100, height: 100)
-                .clipShape(RoundedRectangle(cornerRadius: 16))
-        } placeholder: {
-            Image(systemName: "person.fill")
-                .resizable()
-                .frame(width: 100, height: 100)
-        }
+        KFImage(URL(string: character?.thumbnail ?? .empty))
+            .placeholder {
+                Image(systemName: "person.fill")
+                    .resizable()
+                    .frame(width: 100, height: 100)
+            }
+            .resizable()
+            .scaledToFit()
+            .frame(width: 100, height: 100)
+            .clipShape(RoundedRectangle(cornerRadius: 16))
         
         VStack(alignment: .leading) {
             Text(character?.name ?? .empty)

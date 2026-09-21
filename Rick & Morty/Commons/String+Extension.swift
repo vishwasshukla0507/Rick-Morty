@@ -5,4 +5,6 @@
 //  Created by Vishwas Shukla on 18/09/26.
 //
 
-import Foundation
+extension String {
+    static let empty = ""
+}
