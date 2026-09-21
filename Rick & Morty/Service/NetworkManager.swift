@@ -11,12 +11,9 @@ enum APIError: Error, LocalizedError {
     case invalidURL
     case invalidResponse
     case decodingFailed(Error)
-    case noInternet
     
     var errorDescription: String? {
         switch self {
-        case .noInternet:
-            return "You appear to be offline. Please check your internet connection."
         case .invalidURL, .invalidResponse, .decodingFailed:
             return "Please try again later."
         }
@@ -28,10 +25,6 @@ class NetworkManager {
     private init() {}
     
     func fetch<T: Decodable>(endpoint: APIEndPoint) async throws -> T {
-        guard NetworkMonitor.shared.isConnected else {
-            throw APIError.noInternet
-        }
-        
         guard let url = endpoint.url else {
             throw APIError.invalidURL
         }

@@ -7,7 +7,6 @@ import SwiftUI
 struct RickNMorty: App {
     
     init() {
-//        _ = NetworkMonitor.shared
         ImageCache.default.memoryStorage.config.totalCostLimit = 100 * 1024 * 1024
         ImageCache.default.diskStorage.config.sizeLimit = 300 * 1024 * 1024
         KingfisherManager.shared.defaultOptions = [.loadDiskFileSynchronously, .backgroundDecode]

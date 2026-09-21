@@ -28,7 +28,7 @@ class CharactersListViewModel: ObservableObject {
             characters = try await networkManager.fetch(endpoint: .characters)
             print("Fetched \(characters.results.count) characters")
         } catch {
-            handleError(error: error)
+            print("Error while fetching characters: \(error)")
         }
         
         isLoading = false
@@ -37,26 +37,9 @@ class CharactersListViewModel: ObservableObject {
     func getCharactersByName(name: String) async {
         do {
             searchedCharacters = try await networkManager.fetch(endpoint: .characterByName(name: name))
-            print("Fetched \(characters.results.count) characters")
+            print("Fetched \(searchedCharacters.results.count) character(s)")
         } catch {
-            print("Error: \(error)")
-            handleError(error: error)
-        }
-    }
-    
-    func handleError(error: Error) {
-        print("Handling error with description: \(error.localizedDescription)")
-        switch error as? APIError {
-        case .noInternet:
-            apiError = .noInternet
-        case .invalidResponse:
-            apiError = .invalidResponse
-        case .decodingFailed:
-            apiError = .decodingFailed(error)
-        case .invalidURL:
-            apiError = .invalidURL
-        default:
-            apiError = .invalidResponse
+            print("Error while searching for character: \(error)")
         }
     }
 }

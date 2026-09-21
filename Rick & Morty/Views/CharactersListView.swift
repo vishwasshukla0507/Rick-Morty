@@ -47,7 +47,6 @@ struct CharactersListView: View {
                     await viewModel.getCharactersByName(name: searchCharacter)
                 } catch {
                     print("No character is found")
-                    //                    print("The error is: \(error)")
                 }
             }
         }
@@ -56,38 +55,6 @@ struct CharactersListView: View {
             await viewModel.getUsers()
             charactersLoaded = true
         }
-        .customAlert(viewModel: viewModel)
-        //        .errorAlert(error: $viewModel.apiError) {
-        //            Task { await viewModel.getUsers() }
-        //        }
-    }
-}
-
-struct CustomAlertPopup: ViewModifier {
-    @ObservedObject var viewModel: CharactersListViewModel
-    func body(content: Content) -> some View {
-        content
-            .alert(viewModel.apiError.debugDescription.contains("noInternet") ? "No Internet Connection" : "Something went wrong",
-                   isPresented: Binding(
-                    get: { viewModel.apiError != nil },
-                    set: { isPresented in
-                        if !isPresented { viewModel.apiError = nil }
-                    }
-                   ),
-                   presenting: viewModel.apiError
-            ) { error in
-                switch error {
-                case .noInternet, .decodingFailed, .invalidResponse, .invalidURL:
-                    Button("Retry") {
-                        Task {
-                            print("The error is: \(error)")
-                            await viewModel.getUsers()
-                        }
-                    }
-                }
-            } message: { error in
-                Text(error.localizedDescription)
-            }
     }
 }
 
@@ -114,25 +81,4 @@ func searchListView(characters: [CharacterDetails]) -> some View {
 
 #Preview {
     CharactersListView()
-}
-
-extension View {
-    func errorAlert(error: Binding<APIError?>, retryAction: @escaping () -> Void) -> some View {
-        self.alert("Error",
-                   isPresented: Binding(
-                    get: {
-                        error.wrappedValue != nil
-                    }, set: { isPresented in
-                        if !isPresented { error.wrappedValue = nil }
-                    }
-                   ), presenting: error.wrappedValue) { _ in
-                       Button("Retry") { retryAction() }
-                   } message: { error in
-                       Text(error.localizedDescription)
-                   }
-    }
-    
-    func customAlert(viewModel: CharactersListViewModel) -> some View {
-        modifier(CustomAlertPopup(viewModel: viewModel))
-    }
 }
