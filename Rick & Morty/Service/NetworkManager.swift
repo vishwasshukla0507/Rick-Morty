@@ -11,11 +11,14 @@ enum APIError: Error, LocalizedError {
     case invalidURL
     case invalidResponse
     case decodingFailed(Error)
+    case characterNotFound
     
     var errorDescription: String? {
         switch self {
         case .invalidURL, .invalidResponse, .decodingFailed:
             return "Please try again later."
+        case .characterNotFound:
+            return "Character not found, please try with another name"
         }
     }
 }

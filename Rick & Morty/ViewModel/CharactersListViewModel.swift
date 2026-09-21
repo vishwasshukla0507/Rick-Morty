@@ -23,11 +23,12 @@ class CharactersListViewModel: ObservableObject {
         self.networkManager = networkManager
     }
     
-    func getUsers() async {
+    func getAllCharacters() async {
         do {
             characters = try await networkManager.fetch(endpoint: .characters)
             print("Fetched \(characters.results.count) characters")
         } catch {
+            characters = .init(results: [])
             print("Error while fetching characters: \(error)")
         }
         
@@ -40,6 +41,9 @@ class CharactersListViewModel: ObservableObject {
             print("Fetched \(searchedCharacters.results.count) character(s)")
         } catch {
             print("Error while searching for character: \(error)")
+            searchedCharacters = .init(results: [])
+            apiError = error as? APIError
+            apiError = .characterNotFound
         }
     }
 }

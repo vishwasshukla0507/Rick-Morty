@@ -52,9 +52,10 @@ struct CharactersListView: View {
         }
         .task {
             guard !charactersLoaded else { return }
-            await viewModel.getUsers()
+            await viewModel.getAllCharacters()
             charactersLoaded = true
         }
+        .alertPopUp(viewModel: viewModel)
     }
 }
 
