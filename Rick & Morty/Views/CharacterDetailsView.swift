@@ -34,6 +34,9 @@ func characterImage(url: URL?) -> some View {
                 .frame(width: 200, height: 200)
                 .foregroundStyle(Color.gray.opacity(0.6))
         }
+        .onSuccess { result in
+            print("Details view image loaded from: \(result.cacheType)")
+        }
         .resizable()
         .scaledToFit()
         .frame(width: 200, height: 200)

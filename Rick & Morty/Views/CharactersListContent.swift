@@ -30,6 +30,9 @@ func homeViewContentNavigationLabel(for character: CharacterDetails?) -> some Vi
                     .resizable()
                     .frame(width: 100, height: 100)
             }
+            .onSuccess { result in
+                print("List view image loaded from: \(result.cacheType)")
+            }
             .resizable()
             .scaledToFit()
             .frame(width: 100, height: 100)
