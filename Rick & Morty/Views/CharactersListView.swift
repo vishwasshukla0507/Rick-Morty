@@ -55,7 +55,12 @@ struct CharactersListView: View {
             await viewModel.getAllCharacters()
             charactersLoaded = true
         }
-        .alertPopUp(viewModel: viewModel)
+        .alertPopUp(viewModel: viewModel, shouldRetry: viewModel.shouldReload) {
+            Task {
+                viewModel.isLoading = true
+                await viewModel.getAllCharacters()
+            }
+        }
     }
 }
 

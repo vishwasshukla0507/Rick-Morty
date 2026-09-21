@@ -8,13 +8,19 @@
 import SwiftUI
 
 extension View {
-    func alertPopUp(viewModel: CharactersListViewModel) -> some View {
-        modifier(CustomAlertPopup(viewModel: viewModel))
+    func alertPopUp(viewModel: CharactersListViewModel,
+                    shouldRetry: Bool,
+                    action: @escaping () -> Void) -> some View {
+        modifier(CustomAlertPopup(viewModel: viewModel,
+                                 shouldRetry: shouldRetry,
+                                 action: action))
     }
 }
 
 struct CustomAlertPopup: ViewModifier {
     @ObservedObject var viewModel: CharactersListViewModel
+    let shouldRetry: Bool
+    let action: () -> Void
     
     func body(content: Content) -> some View {
         content
@@ -29,7 +35,13 @@ struct CustomAlertPopup: ViewModifier {
             ) { error in
                 switch error {
                 case .decodingFailed, .invalidResponse, .invalidURL, .characterNotFound:
-                    Button("Ok", role: .close) {}
+                    if shouldRetry {
+                        Button("Retry") {
+                            action()
+                        }
+                    } else {
+                        Button("Ok", role: .close) {}
+                    }
                 }
             } message: { error in
                 Text(error.localizedDescription)

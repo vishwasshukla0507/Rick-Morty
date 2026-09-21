@@ -13,6 +13,7 @@ class CharactersListViewModel: ObservableObject {
     @Published var searchedCharacters: CharactersModel
     @Published var isLoading: Bool = true
     @Published var apiError: APIError?
+    @Published var shouldReload: Bool = false
     let networkManager: NetworkManager
     
     init(characters: CharactersModel = .init(results: []),
@@ -29,6 +30,9 @@ class CharactersListViewModel: ObservableObject {
             print("Fetched \(characters.results.count) characters")
         } catch {
             characters = .init(results: [])
+            apiError = error as? APIError
+            apiError = .invalidResponse
+            shouldReload = true
             print("Error while fetching characters: \(error)")
         }
         
